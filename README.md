@@ -1,118 +1,356 @@
-# Astro Starter Kit
+# AstroStarter
 
-## 🚀 Project Structure
+A modern, feature-rich Astro starter template with TypeScript, Tailwind CSS, Alpine.js, and comprehensive developer tooling.
 
-Inside of your Astro project, you'll see the following folders and files:
+[![Astro](https://img.shields.io/badge/Astro-5.12.8-orange)](https://astro.build/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1.11-38B2AC)](https://tailwindcss.com/)
+[![Alpine.js](https://img.shields.io/badge/Alpine.js-3.14.9-77C1D2)](https://alpinejs.dev/)
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+## ✨ Features
+
+- 🚀 **Astro 5** - The modern web framework for content-focused websites
+- 🎨 **Tailwind CSS 4** - Latest utility-first CSS framework with modern features
+- ⚡ **Alpine.js** - Lightweight JavaScript framework for interactive components
+- 📱 **Responsive Design** - Mobile-first approach with flexible layouts
+- 🔍 **SEO Optimized** - Built-in SEO components with Open Graph support
+- 🎯 **TypeScript** - Full TypeScript support with strict configuration
+- 🎨 **Component Library** - Pre-built components with variant support
+- 🔧 **Developer Tools** - ESLint, Prettier, Husky, and Commitlint
+- 📦 **Path Aliases** - Clean imports with `@/` prefix
+- 🌐 **Sitemap Generation** - Automatic sitemap generation
+- 🔗 **Link Prefetching** - Optimized navigation with prefetch enabled
+- 🎨 **Favicon Management** - Comprehensive favicon handling component
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- npm, yarn, or pnpm
+
+### Installation
+
+1. Clone the repository or use this template
+2. Install dependencies:
+
+```bash
+npm install
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+3. Set up your favicon files:
+   - Create a `public/favicon/` directory
+   - Add your `favicon.ico` file (required)
+   - Optionally add other favicon formats (see Favicon Component section)
 
-## 🧞 Commands
+4. Update the site URL in `astro.config.mjs`:
 
-All commands are run from the root of the project, from a terminal:
+```javascript
+export default defineConfig({
+  site: "https://yourdomain.com", // Change this!
+  // ... rest of config
+});
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+5. Start the development server:
 
-## 🎨 Components
+```bash
+npm run dev
+```
 
-### Favicon Component
+Visit `http://localhost:4321` to see your site!
 
-A comprehensive Astro component that automatically detects and renders favicon meta tags for all common favicon formats.
+## 🗂️ Project Structure
 
-#### Features
+```
+├── public/
+│   └── favicon/              # Favicon files
+│       ├── favicon.ico       # Required
+│       ├── favicon-16x16.png
+│       ├── favicon-32x32.png
+│       ├── apple-touch-icon.png
+│       ├── android-chrome-*.png
+│       └── site.webmanifest
+├── src/
+│   ├── assets/              # Static assets
+│   ├── components/          # Reusable components
+│   │   ├── Button.astro     # Styled button component
+│   │   └── Favicon.astro    # Favicon management
+│   ├── layouts/
+│   │   └── Layout.astro     # Main layout with SEO
+│   ├── pages/
+│   │   ├── index.astro      # Homepage
+│   │   └── about.astro      # About page
+│   ├── styles/
+│   │   └── global.css       # Global styles and utilities
+│   └── utils/
+│       ├── cn.ts           # Class name utility
+│       └── mergeDeep.ts    # Deep merge utility
+├── astro.config.mjs        # Astro configuration
+├── tailwind.config.js      # Tailwind configuration
+├── tsconfig.json          # TypeScript configuration
+└── package.json           # Dependencies and scripts
+```
 
-- Automatically scans `public/favicon/` directory for favicon files
-- Renders appropriate meta tags for each detected favicon format
-- Throws helpful errors if required files or the favicon directory is missing
-- Supports all modern favicon formats and sizes
-- Includes additional meta tags for better browser support
+## 🧞 Available Commands
 
-#### Usage
+All commands are run from the root of the project:
 
-The Favicon component is already integrated into the main layout. To use it:
+| Command            | Action                                       |
+| :----------------- | :------------------------------------------- |
+| `npm install`      | Install dependencies                         |
+| `npm run dev`      | Start development server at `localhost:4321` |
+| `npm run build`    | Build production site to `./dist/`           |
+| `npm run preview`  | Preview build locally                        |
+| `npm run prettier` | Format code with Prettier                    |
+| `npm run lint`     | Lint and fix code with ESLint                |
 
-1. Create a `public/favicon/` directory in your project root
-2. Add your favicon files to this directory
-3. The component will automatically detect and render the appropriate meta tags
+### Button Component
+
+A flexible, accessible button component with multiple variants and sizes using Class Variance Authority (CVA).
+
+**Features:**
+
+- Multiple variants: `primary`, `outline`
+- Multiple sizes: `xs`, `sm`, `base`, `md`, `lg`
+- Can render as button or anchor element
+- Full TypeScript support with proper props interface
+- Tailwind CSS styling with hover effects
+
+**Usage:**
 
 ```astro
 ---
-import Favicon from "@/components/Favicon.astro";
+import Button from "@/components/Button.astro";
 ---
 
-<html>
-  <head>
-    <Favicon />
-    <!-- other meta tags -->
-  </head>
-  <!-- rest of your layout -->
-</html>
+<!-- Basic buttons -->
+<Button>Click me</Button>
+<Button variant="outline">Outline button</Button>
+
+<!-- Different sizes -->
+<Button size="lg">Large button</Button>
+<Button size="sm">Small button</Button>
+
+<!-- As a link -->
+<Button href="/about">Go to About</Button>
 ```
 
-#### Supported Favicon Files
+### Favicon Component
 
-The component looks for these files in `public/favicon/`:
+A comprehensive favicon management system that automatically detects and renders favicon meta tags.
 
-**Required Files:**
+**Features:**
 
-- `favicon.ico` - Classic favicon format (required)
+- Automatically scans `public/favicon/` directory
+- Renders appropriate meta tags for detected favicon formats
+- Throws helpful errors for missing files or directories
+- Supports all modern favicon formats and sizes
+- Includes additional meta tags for better browser support
 
-**Optional Files:**
+**Supported Files:**
 
-- `favicon-16x16.png` - 16x16 PNG favicon
-- `favicon-32x32.png` - 32x32 PNG favicon
-- `apple-touch-icon.png` - 180x180 Apple touch icon
-- `android-chrome-192x192.png` - 192x192 Android icon
-- `android-chrome-512x512.png` - 512x512 Android icon
-- `site.webmanifest` - Web app manifest
-- `safari-pinned-tab.svg` - Safari pinned tab icon
+- `favicon.ico` (required)
+- `favicon-16x16.png`, `favicon-32x32.png`
+- `apple-touch-icon.png`
+- `android-chrome-192x192.png`, `android-chrome-512x512.png`
+- `site.webmanifest`
+- `safari-pinned-tab.svg`
 
-#### Generated Meta Tags
+**Usage:**
+The component is already integrated into the main layout. Simply add your favicon files to `public/favicon/`.
 
-The component automatically generates the appropriate meta tags based on which files are present:
+## 🎨 Styling System
 
-```html
-<!-- Example output -->
-<link rel="icon" href="/favicon/favicon.ico" sizes="any" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
-<link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
-<link rel="manifest" href="/favicon/site.webmanifest" />
-<meta name="theme-color" content="#ffffff" />
-<meta name="msapplication-TileColor" content="#da532c" />
+### Tailwind CSS 4
+
+The project uses the latest Tailwind CSS v4 with modern features:
+
+- **Vite Plugin**: Integrated via `@tailwindcss/vite`
+- **Custom Utilities**: Container utility with auto margins
+- **Base Styles**: Consistent border colors and button cursor
+- **Modern Syntax**: Using the new `@import "tailwindcss"` syntax
+
+### Class Name Utilities
+
+**`cn()` Function**: A utility for merging CSS classes with conflict resolution:
+
+```typescript
+import { cn } from "@/utils/cn";
+
+// Merges classes and resolves conflicts
+const className = cn("p-4 bg-red-500", "bg-blue-500"); // Results in "p-4 bg-blue-500"
 ```
 
-#### Error Handling
+## 🧠 State Management
 
-The component will throw helpful errors in these cases:
+### Alpine.js Integration
 
-1. **Missing favicon directory**: If `public/favicon/` doesn't exist
-2. **Missing required files**: If `favicon.ico` is not present
+Pre-configured Alpine.js setup for interactive components:
 
-This ensures you catch favicon issues during development rather than in production.
+```javascript
+// src/alpine.ts - Add your Alpine components here
+Alpine.data("demo", () => {
+  return {
+    toggle: () => {
+      console.log("toggle");
+    },
+  };
+});
+```
 
-#### Best Practices
+Use in templates:
 
-1. Always include `favicon.ico` for maximum browser compatibility
-2. Include multiple PNG sizes for modern browsers
-3. Add `apple-touch-icon.png` for iOS devices
-4. Include `site.webmanifest` for PWA support
-5. Generate your favicons using [RealFaviconGenerator](https://realfavicongenerator.net/)
+```astro
+<div x-data="demo">
+  <button x-on:click="toggle">Click me</button>
+</div>
+```
+
+## 🔧 Developer Experience
+
+### TypeScript Configuration
+
+- **Strict Mode**: Uses Astro's strict TypeScript configuration
+- **Path Aliases**: Clean imports with `@/` prefix for components, layouts, utils, and styles
+- **Type Safety**: Full type support for Astro components and props
+
+### Code Quality Tools
+
+**ESLint Configuration:**
+
+- JavaScript/TypeScript linting
+- Astro-specific rules
+- JSX accessibility checks
+- Automatic fixing with `npm run lint`
+
+**Prettier Setup:**
+
+- Astro plugin support
+- Tailwind CSS class sorting
+- 100 character line length
+- Automatic formatting with `npm run prettier`
+
+**Git Hooks (Husky):**
+
+- Pre-commit: Runs Prettier and ESLint automatically
+- Commit linting with conventional commits
+
+### VS Code Integration
+
+**Recommended Extensions:**
+
+- Astro VS Code extension
+- TypeScript support
+- Tailwind CSS IntelliSense
+
+**Launch Configuration:**
+
+- One-click development server start
+- Integrated debugging support
+
+## 🌐 SEO & Performance
+
+### Built-in SEO
+
+The layout includes comprehensive SEO features:
+
+- **Meta Tags**: Automatic title, description, and Open Graph tags
+- **Sitemap**: Auto-generated sitemap for search engines
+- **Performance**: Link prefetching enabled for faster navigation
+- **PWA Ready**: Web manifest support for progressive web apps
+
+### SEO Usage
+
+```astro
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout
+  seo={{
+    title: "About Us",
+    description: "Learn more about our project",
+    openGraph: {
+      basic: {
+        title: "Custom OG Title",
+        type: "article",
+      },
+    },
+  }}
+>
+  <!-- Your content -->
+</Layout>
+```
+
+## 🔧 Configuration
+
+### Environment Setup
+
+1. **Site URL**: Update `astro.config.mjs` with your production URL
+2. **Favicon**: Add your favicon files to `public/favicon/`
+3. **SEO Defaults**: Modify default SEO settings in `src/layouts/Layout.astro`
+
+### Customization
+
+**Adding New Components:**
+
+```astro
+---
+// src/components/YourComponent.astro
+export interface Props {
+  title: string;
+  variant?: "default" | "highlighted";
+}
+
+const { title, variant = "default" } = Astro.props;
+---
+
+<div class={cn("base-styles", { "highlighted-styles": variant === "highlighted" })}>
+  {title}
+</div>
+```
+
+**Adding Alpine.js Components:**
+
+```javascript
+// src/alpine.ts
+Alpine.data("yourComponent", () => ({
+  // Your component data and methods
+}));
+```
+
+## 📦 Deployment
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+The built site will be available in the `./dist/` directory.
+
+### Deployment Platforms
+
+This project is ready to deploy on:
+
+- **Vercel** - Zero configuration deployment
+- **Netlify** - Automatic builds and deploys
+- **GitHub Pages** - Static site hosting
+- **Cloudflare Pages** - Fast edge deployment
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes using conventional commits
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+**Created by [Lucky Media](https://www.luckymedia.dev)**
