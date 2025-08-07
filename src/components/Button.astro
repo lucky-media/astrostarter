@@ -54,10 +54,7 @@ const buttonVariants = cva(
       <slot />
     </a>
   ) : (
-    <button
-      class={cn(buttonVariants({ variant, size, class: Astro.props.class }))}
-      {...props}
-    >
+    <button class={cn(buttonVariants({ variant, size, class: Astro.props.class }))} {...props}>
       <slot />
     </button>
   )
