@@ -28,7 +28,7 @@ const missingRequiredFiles: string[] = [];
 // Check if the favicon directory exists
 if (!fs.existsSync(publicFaviconPath)) {
   throw new Error(
-    "Favicon directory not found: public/favicon/. Please create this directory and add your favicon files."
+    "Favicon directory not found: public/favicon/. Please create this directory and add your favicon files.",
   );
 }
 
@@ -45,7 +45,7 @@ faviconFiles.forEach((file) => {
 // Throw error if required files are missing
 if (missingRequiredFiles.length > 0) {
   throw new Error(
-    `Required favicon files are missing from public/favicon/: ${missingRequiredFiles.join(", ")}. Please add these files to ensure proper favicon functionality.`
+    `Required favicon files are missing from public/favicon/: ${missingRequiredFiles.join(", ")}. Please add these files to ensure proper favicon functionality.`,
   );
 }
 
