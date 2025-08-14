@@ -1,0 +1,54 @@
+---
+// Example of how to use the generated types in Astro
+import { client } from "@/utils/graphql";
+import { GetBasicPagesDocument, type GetBasicPagesQueryVariables } from "../generated/graphql";
+
+// Example usage with full type safety
+const variables: GetBasicPagesQueryVariables = {
+  limit: 10,
+};
+
+const data = await client(GetBasicPagesDocument, variables);
+
+// Now data is fully typed!
+const pages = data.entries?.data || [];
+---
+
+<div>
+  <h1>Pages from Statamic</h1>
+  <p>This example shows {pages.length} pages from your Statamic GraphQL API.</p>
+  <ul>
+    {
+      pages.map((page) => (
+        <li>
+          <a href={page.uri || "#"}>
+            <strong>{page.title}</strong>
+          </a>
+          <small>ID: {page.id}</small>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  small {
+    display: block;
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 0.25rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  a {
+    text-decoration: none;
+    color: #333;
+  }
+
+  a:hover {
+    color: #0066cc;
+  }
+</style>
