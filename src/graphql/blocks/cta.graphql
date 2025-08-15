@@ -1,4 +1,0 @@
-fragment CtaBlock on Set_Blocks_Cta {
-  id
-  type
-}

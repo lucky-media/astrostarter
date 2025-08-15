@@ -1,8 +1,0 @@
-fragment HeroSectionBlock on Set_Blocks_HeroSection {
-  id
-  type
-  title
-  has_tagline
-  has_tagline_post
-  hero_tagline
-}
