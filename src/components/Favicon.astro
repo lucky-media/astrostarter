@@ -1,0 +1,89 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+
+// Define the expected favicon files and their properties
+interface FaviconFile {
+  name: string;
+  sizes: string;
+  type: string;
+  required?: boolean;
+}
+
+const faviconFiles: FaviconFile[] = [
+  { name: "favicon.ico", sizes: "any", type: "image/x-icon", required: true },
+  { name: "favicon-16x16.png", sizes: "16x16", type: "image/png" },
+  { name: "favicon-32x32.png", sizes: "32x32", type: "image/png" },
+  { name: "apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+  { name: "android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+  { name: "android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
+  { name: "site.webmanifest", sizes: "", type: "application/manifest+json" },
+];
+
+// Check which favicon files exist in public/favicon/
+const publicFaviconPath = path.join(process.cwd(), "public", "favicon");
+const existingFiles: FaviconFile[] = [];
+const missingRequiredFiles: string[] = [];
+
+// Check if the favicon directory exists
+if (!fs.existsSync(publicFaviconPath)) {
+  throw new Error(
+    "Favicon directory not found: public/favicon/. Please create this directory and add your favicon files.",
+  );
+}
+
+// Check each expected favicon file
+faviconFiles.forEach((file) => {
+  const filePath = path.join(publicFaviconPath, file.name);
+  if (fs.existsSync(filePath)) {
+    existingFiles.push(file);
+  } else if (file.required) {
+    missingRequiredFiles.push(file.name);
+  }
+});
+
+// Throw error if required files are missing
+if (missingRequiredFiles.length > 0) {
+  throw new Error(
+    `Required favicon files are missing from public/favicon/: ${missingRequiredFiles.join(", ")}. Please add these files to ensure proper favicon functionality.`,
+  );
+}
+
+// Generate favicon URLs
+const generateFaviconUrl = (filename: string) => `/favicon/${filename}`;
+---
+
+<!-- Favicon Meta Tags -->{
+  existingFiles.map((file) => {
+    const url = generateFaviconUrl(file.name);
+
+    if (file.name === "favicon.ico") {
+      return <link rel="icon" href={url} sizes="any" />;
+    }
+
+    if (file.name === "apple-touch-icon.png") {
+      return <link rel="apple-touch-icon" href={url} />;
+    }
+
+    if (file.name === "site.webmanifest") {
+      return <link rel="manifest" href={url} />;
+    }
+
+    if (file.type === "image/png") {
+      return <link rel="icon" type={file.type} sizes={file.sizes} href={url} />;
+    }
+
+    return null;
+  })
+}
+
+<!-- Additional meta tags for better browser support -->
+<meta name="theme-color" content="#ffffff" />
+<meta name="msapplication-TileColor" content="#da532c" />
+
+<!-- Safari pinned tab icon (if available) -->
+{
+  existingFiles.find((f) => f.name === "safari-pinned-tab.svg") && (
+    <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+  )
+}

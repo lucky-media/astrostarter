@@ -1,0 +1,14 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Button from "@/components/Button.astro";
+---
+
+<Layout seo={{ title: "About Us", description: "Learn more about our project" }}>
+  <div class="container py-20">
+    <div class="flex flex-row space-x-4">
+      <h1 class="text-3xl font-bold">About Page</h1>
+      <p>This is the about page of our Astro project.</p>
+    </div>
+    <div class="max-w-lg"><Button href="/">Go back</Button></div>
+  </div>
+</Layout>
