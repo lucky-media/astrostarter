@@ -77,7 +77,8 @@ Visit `http://localhost:4321` to see your site!
 │   │   ├── Button.astro     # Styled button component
 │   │   └── Favicon.astro    # Favicon management
 │   ├── layouts/
-│   │   └── Layout.astro     # Main layout with SEO
+│   │   ├── Layout.astro     # Main layout wrapper
+│   │   └── Head.astro       # Head component with SEO
 │   ├── pages/
 │   │   ├── index.astro      # Homepage
 │   │   └── about.astro      # About page
@@ -87,7 +88,6 @@ Visit `http://localhost:4321` to see your site!
 │       ├── cn.ts           # Class name utility
 │       └── mergeDeep.ts    # Deep merge utility
 ├── astro.config.mjs        # Astro configuration
-├── tailwind.config.js      # Tailwind configuration
 ├── tsconfig.json          # TypeScript configuration
 └── package.json           # Dependencies and scripts
 ```
@@ -105,36 +105,110 @@ All commands are run from the root of the project:
 | `npm run prettier` | Format code with Prettier                    |
 | `npm run lint`     | Lint and fix code with ESLint                |
 
+## 📚 Components Guide
+
+### Layout Components
+
+#### Main Layout (`Layout.astro`)
+
+The main layout wrapper that includes the Head component with SEO support.
+
+**Props:**
+
+- `seo` - SEO configuration object (see SEO section)
+- `class` - Optional CSS class for the body element
+
+**Usage:**
+
+```astro
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout class="bg-gray-50">
+  <div class="container">
+    <!-- Your page content -->
+  </div>
+</Layout>
+```
+
+#### Head Component (`Head.astro`)
+
+Manages document head with comprehensive SEO support. Automatically included in the main Layout.
+
+**Features:**
+
+- Title management with template support
+- Meta descriptions
+- Open Graph tags for social media
+- Twitter Card support
+- Favicon integration
+- Client-side routing with transitions
+
+**Default Configuration:**
+
+- Default title: "AstroStarter"
+- Title template: "%s | AstroStarter"
+- Default description: "A starter kit for Astro"
+- Default OG image: `${Astro.site}og-image.jpg`
+
 ### Button Component
 
 A flexible, accessible button component with multiple variants and sizes using Class Variance Authority (CVA).
 
+**Props:**
+
+- `href` (optional) - If provided, renders as an anchor link
+- `variant` - Button style: `"primary"` (default) | `"outline"`
+- `size` - Button size: `"xs"` | `"sm"` | `"base"` (default) | `"md"` | `"lg"`
+- `class` - Additional CSS classes
+- All standard HTML button/anchor attributes
+
 **Features:**
 
-- Multiple variants: `primary`, `outline`
-- Multiple sizes: `xs`, `sm`, `base`, `md`, `lg`
-- Can render as button or anchor element
+- Renders as `<button>` or `<a>` based on `href` prop
 - Full TypeScript support with proper props interface
-- Tailwind CSS styling with hover effects
+- Tailwind CSS styling with smooth hover transitions
+- Accessible by default
+- Slot support for custom content
 
-**Usage:**
+**Usage Examples:**
 
 ```astro
 ---
 import Button from "@/components/Button.astro";
 ---
 
-<!-- Basic buttons -->
+<!-- Basic primary button -->
 <Button>Click me</Button>
+
+<!-- Outline variant -->
 <Button variant="outline">Outline button</Button>
 
 <!-- Different sizes -->
-<Button size="lg">Large button</Button>
-<Button size="sm">Small button</Button>
+<Button size="xs">Extra Small</Button>
+<Button size="sm">Small</Button>
+<Button size="base">Base (default)</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>
 
 <!-- As a link -->
 <Button href="/about">Go to About</Button>
+<Button href="https://example.com" variant="outline" size="lg"> External Link </Button>
+
+<!-- With custom classes -->
+<Button class="shadow-lg">Custom styled</Button>
+
+<!-- With HTML attributes -->
+<Button type="submit" disabled>Submit</Button>
 ```
+
+**Styling:**
+
+- Primary variant: Purple background with white text, transitions to transparent with border on hover
+- Outline variant: Transparent with purple border, transitions to purple background on hover
+- All sizes include consistent padding and spacing
+- Group utility for hover effects on child elements
 
 ### Favicon Component
 
@@ -144,123 +218,50 @@ A comprehensive favicon management system that automatically detects and renders
 
 - Automatically scans `public/favicon/` directory
 - Renders appropriate meta tags for detected favicon formats
-- Throws helpful errors for missing files or directories
+- Throws helpful errors for missing required files or directories
 - Supports all modern favicon formats and sizes
-- Includes additional meta tags for better browser support
+- Includes additional meta tags for better browser support (theme color, Safari pinned tab)
 
 **Supported Files:**
 
-- `favicon.ico` (required)
-- `favicon-16x16.png`, `favicon-32x32.png`
-- `apple-touch-icon.png`
-- `android-chrome-192x192.png`, `android-chrome-512x512.png`
-- `site.webmanifest`
-- `safari-pinned-tab.svg`
+| File                         | Size    | Required | Purpose                    |
+| :--------------------------- | :------ | :------- | :------------------------- |
+| `favicon.ico`                | Any     | ✅ Yes   | Legacy browser support     |
+| `favicon-16x16.png`          | 16x16   | No       | Standard favicon           |
+| `favicon-32x32.png`          | 32x32   | No       | Standard favicon           |
+| `apple-touch-icon.png`       | 180x180 | No       | iOS devices                |
+| `android-chrome-192x192.png` | 192x192 | No       | Android devices            |
+| `android-chrome-512x512.png` | 512x512 | No       | Android devices (high-res) |
+| `site.webmanifest`           | -       | No       | PWA manifest               |
+| `safari-pinned-tab.svg`      | -       | No       | Safari pinned tabs         |
 
-**Usage:**
-The component is already integrated into the main layout. Simply add your favicon files to `public/favicon/`.
+**Setup:**
 
-## 🎨 Styling System
+1. Create the favicon directory:
 
-### Tailwind CSS 4
-
-The project uses the latest Tailwind CSS v4 with modern features:
-
-- **Vite Plugin**: Integrated via `@tailwindcss/vite`
-- **Custom Utilities**: Container utility with auto margins
-- **Base Styles**: Consistent border colors and button cursor
-- **Modern Syntax**: Using the new `@import "tailwindcss"` syntax
-
-### Class Name Utilities
-
-**`cn()` Function**: A utility for merging CSS classes with conflict resolution:
-
-```typescript
-import { cn } from "@/utils/cn";
-
-// Merges classes and resolves conflicts
-const className = cn("p-4 bg-red-500", "bg-blue-500"); // Results in "p-4 bg-blue-500"
+```bash
+mkdir -p public/favicon
 ```
 
-## 🧠 State Management
+2. Add your favicon files to `public/favicon/`. At minimum, you need `favicon.ico`.
 
-### Alpine.js Integration
+3. The component is already integrated into [`Head.astro`](src/layouts/Head.astro). No additional setup required!
 
-Pre-configured Alpine.js setup for interactive components:
+**Error Handling:**
 
-```javascript
-// src/alpine.ts - Add your Alpine components here
-Alpine.data("demo", () => {
-  return {
-    toggle: () => {
-      console.log("toggle");
-    },
-  };
-});
-```
-
-Use in templates:
-
-```astro
-<div x-data="demo">
-  <button x-on:click="toggle">Click me</button>
-</div>
-```
-
-## 🔧 Developer Experience
-
-### TypeScript Configuration
-
-- **Strict Mode**: Uses Astro's strict TypeScript configuration
-- **Path Aliases**: Clean imports with `@/` prefix for components, layouts, utils, and styles
-- **Type Safety**: Full type support for Astro components and props
-
-### Code Quality Tools
-
-**ESLint Configuration:**
-
-- JavaScript/TypeScript linting
-- Astro-specific rules
-- JSX accessibility checks
-- Automatic fixing with `npm run lint`
-
-**Prettier Setup:**
-
-- Astro plugin support
-- Tailwind CSS class sorting
-- 100 character line length
-- Automatic formatting with `npm run prettier`
-
-**Git Hooks (Husky):**
-
-- Pre-commit: Runs Prettier and ESLint automatically
-- Commit linting with conventional commits
-
-### VS Code Integration
-
-**Recommended Extensions:**
-
-- Astro VS Code extension
-- TypeScript support
-- Tailwind CSS IntelliSense
-
-**Launch Configuration:**
-
-- One-click development server start
-- Integrated debugging support
+- Throws error if `public/favicon/` directory doesn't exist
+- Throws error if `favicon.ico` is missing
+- Provides helpful error messages with file paths
 
 ## 🌐 SEO & Performance
 
-### Built-in SEO
+### SEO Configuration
 
-The layout includes comprehensive SEO features:
+The SEO system supports two approaches: simple and advanced.
 
-- **Meta Tags**: Automatic title, description, and Open Graph tags
-- **Sitemap**: Auto-generated sitemap for search engines
-- **Performance**: Link prefetching enabled for faster navigation
-- **PWA Ready**: Web manifest support for progressive web apps
+#### Simple SEO (Recommended for most pages)
 
-### SEO Usage
+Pass basic SEO properties directly:
 
 ```astro
 ---
@@ -270,12 +271,58 @@ import Layout from "@/layouts/Layout.astro";
 <Layout
   seo={{
     title: "About Us",
-    description: "Learn more about our project",
+    description: "Learn more about our company and mission",
+    image: "/images/about-og.jpg",
+  }}
+>
+  <!-- Your content -->
+</Layout>
+```
+
+**Simple SEO Props:**
+
+- `title` - Page title (will be formatted with title template)
+- `description` - Page description
+- `image` - Open Graph image URL (null to omit)
+
+#### Advanced SEO
+
+For full control over SEO tags, you can pass the complete `astro-seo` configuration:
+
+```astro
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout
+  seo={{
+    title: "Blog Post Title",
+    description: "Blog post description",
     openGraph: {
       basic: {
         title: "Custom OG Title",
         type: "article",
+        image: "https://example.com/og-image.jpg",
       },
+      optional: {
+        description: "Custom OG description",
+        siteName: "My Blog",
+        locale: "en_US",
+      },
+      article: {
+        publishedTime: "2025-01-01T00:00:00Z",
+        authors: ["John Doe"],
+        tags: ["astro", "web-development"],
+      },
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: "@yourtwitterhandle",
+      creator: "@authorhandle",
+    },
+    extend: {
+      meta: [{ name: "custom-meta", content: "custom value" }],
+      link: [{ rel: "canonical", href: "https://example.com/blog/post" }],
     },
   }}
 >
@@ -283,61 +330,27 @@ import Layout from "@/layouts/Layout.astro";
 </Layout>
 ```
 
-## 🔧 Configuration
+**To customize defaults:**
 
-### Environment Setup
+1. Update the `baseSeoData` object in [`Head.astro`](src/layouts/Head.astro)
+2. Change default description, site name, etc.
+3. Update the default OG image path
 
-1. **Site URL**: Update `astro.config.mjs` with your production URL
-2. **Favicon**: Add your favicon files to `public/favicon/`
-3. **SEO Defaults**: Modify default SEO settings in `src/layouts/Layout.astro`
+### Performance Features
 
-### Customization
+- **Link Prefetching**: Enabled by default in [`astro.config.mjs`](astro.config.mjs) with `prefetchAll: true`
+- **Client Router**: Astro's view transitions enabled for smooth navigation
+- **Sitemap**: Auto-generated via `@astrojs/sitemap` integration
 
-**Adding New Components:**
+## 📦 Pre-Deployment Checklist
 
-```astro
----
-// src/components/YourComponent.astro
-export interface Props {
-  title: string;
-  variant?: "default" | "highlighted";
-}
-
-const { title, variant = "default" } = Astro.props;
----
-
-<div class={cn("base-styles", { "highlighted-styles": variant === "highlighted" })}>
-  {title}
-</div>
-```
-
-**Adding Alpine.js Components:**
-
-```javascript
-// src/alpine.ts
-Alpine.data("yourComponent", () => ({
-  // Your component data and methods
-}));
-```
-
-## 📦 Deployment
-
-### Build for Production
-
-```bash
-npm run build
-```
-
-The built site will be available in the `./dist/` directory.
-
-### Deployment Platforms
-
-This project is ready to deploy on:
-
-- **Vercel** - Zero configuration deployment
-- **Netlify** - Automatic builds and deploys
-- **GitHub Pages** - Static site hosting
-- **Cloudflare Pages** - Fast edge deployment
+- [ ] Update `site` URL in [`astro.config.mjs`](astro.config.mjs)
+- [ ] Add all required favicon files to `public/favicon/`
+- [ ] Update SEO defaults in [`Head.astro`](src/layouts/Head.astro)
+- [ ] Test with `npm run build` and `npm run preview`
+- [ ] Verify sitemap generation at `/sitemap-index.xml`
+- [ ] Check Open Graph images are accessible
+- [ ] Test on mobile devices
 
 ## 🤝 Contributing
 
