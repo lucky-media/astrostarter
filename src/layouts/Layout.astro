@@ -1,41 +1,17 @@
 ---
-import { SEO, type Props as SEOProps } from "astro-seo";
-import { ClientRouter } from "astro:transitions";
-import { mergeDeep } from "@/utils/mergeDeep";
-import Favicon from "@/components/Favicon.astro";
-import "@/styles/global.css";
+import Head, { type Props as HeadProps } from "@/layouts/Head.astro";
 
-const defaultSEO: SEOProps = {
-  title: "AstroStarter",
-  description: "A starter kit for Astro",
-  openGraph: {
-    basic: {
-      title: "AstroStarter",
-      type: "website",
-      image: `${Astro.site}og-image.jpg`,
-    },
-    optional: {
-      description: "A starter kit for Astro",
-      siteName: "AstroStarter",
-    },
-  },
-};
+interface Props extends HeadProps {
+  class?: string;
+}
 
-const { seo } = Astro.props;
-
-const seoData = mergeDeep(defaultSEO, seo);
+const { class: className, ...headProps } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <Favicon />
-    <SEO {...seoData} />
-    <ClientRouter />
-  </head>
-  <body>
+  <Head {...headProps} />
+  <body class={className}>
     <slot />
   </body>
 </html>

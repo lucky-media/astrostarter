@@ -1,0 +1,70 @@
+---
+import { SEO, type Props as SEOProps } from "astro-seo";
+import { ClientRouter } from "astro:transitions";
+
+import Favicon from "@/components/Favicon.astro";
+
+import "@/styles/global.css";
+import { mergeDeep } from "@/utils/mergeDeep";
+
+interface SimpleSEO {
+  title?: string;
+  description?: string;
+  image?: string | null;
+}
+
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+
+export interface Props {
+  seo?: SimpleSEO | (DeepPartial<SEOProps> & SimpleSEO);
+}
+
+const { seo } = Astro.props;
+
+const defaultTitle = "AstroStarter";
+const titleTemplate = "%s | AstroStarter";
+
+const getFormattedTitle = (title?: string) => {
+  if (!title) return defaultTitle;
+  return titleTemplate.replace("%s", title);
+};
+
+const seoTitle = getFormattedTitle(seo?.title);
+const seoDescription = seo?.description || "A starter kit for Astro";
+const seoImage = (seo && "image" in seo ? seo.image : null) || `${Astro.site}og-image.jpg`;
+
+const baseSeoData: SEOProps = {
+  title: seoTitle,
+  description: seoDescription,
+  openGraph: {
+    basic: {
+      title: seoTitle,
+      type: "website",
+      image: seoImage,
+    },
+    optional: {
+      description: seoDescription,
+      siteName: "AstroStarter",
+    },
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: seoTitle,
+    description: seoDescription,
+    image: seoImage,
+  },
+};
+
+// Merge with any additional SEO props passed down
+const seoData = seo ? mergeDeep({}, baseSeoData, seo as DeepPartial<SEOProps>) : baseSeoData;
+---
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <Favicon />
+  <SEO {...seoData} />
+  <ClientRouter />
+</head>
